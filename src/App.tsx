@@ -1,10 +1,10 @@
 import "./App.scss";
 
-import { Viewer } from "@bentley/itwin-viewer-react";
 import React, { useEffect, useState } from "react";
 
 import AuthorizationClient from "./AuthorizationClient";
 import { Header } from "./Header";
+import { ChildWindowLocationProps, UiFramework } from "@bentley/ui-framework";
 
 const App: React.FC = () => {
   const [isAuthorized, setIsAuthorized] = useState(
@@ -61,6 +61,16 @@ const App: React.FC = () => {
     setIsAuthorized(false);
   };
 
+  const onClick = () => {
+    const location: ChildWindowLocationProps = {
+      width: 800,
+      height: 600,
+      left: 0,
+      top: 0,
+    };
+    UiFramework.childWindowManager.openChildWindow("testChild", "Test Child", <p>Content</p>, location, true);
+  }
+
   return (
     <div className="viewer-container">
       <Header
@@ -72,11 +82,7 @@ const App: React.FC = () => {
         <span>"Logging in...."</span>
       ) : (
         isAuthorized && (
-          <Viewer
-            contextId={process.env.IMJS_CONTEXT_ID ?? ""}
-            iModelId={process.env.IMJS_IMODEL_ID ?? ""}
-            authConfig={{ oidcClient: AuthorizationClient.oidcClient }}
-          />
+          <button onClick={onClick}>Click Me</button>
         )
       )}
     </div>
